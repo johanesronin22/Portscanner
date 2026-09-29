@@ -1,0 +1,10 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+*.db
+exports/pdf/*
+exports/html/*
+!exports/pdf/.gitkeep
+!exports/html/.gitkeep

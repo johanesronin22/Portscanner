@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <h1>Automated Network Service Discovery<br>& Security Reporting</h1>
+    <p class="subtitle">Enter an authorized target below to identify exposed services and generate a basic security posture report.</p>
+    
+    <div class="scan-card">
+        <form action="{{ url_for('scan') }}" method="POST" class="scan-form">
+            <div class="input-group">
+                <label for="target" class="sr-only">Target IP or Domain</label>
+                <input type="text" id="target" name="target" placeholder="192.168.1.1 or scanme.nmap.org" required class="monospace-input">
+            </div>
+            <button type="submit" class="btn btn-primary btn-large">START SCAN</button>
+        </form>
+        <div class="security-notice mt-3">
+            <strong>⚠ AUTHORIZATION NOTICE</strong><br>
+            By clicking Start Scan, you confirm that you own or have explicit permission to scan the specified target.
+        </div>
+    </div>
+</div>
+
+<div class="how-it-works mt-5">
+    <h2 class="text-center section-title">HOW IT WORKS</h2>
+    <div class="grid-4">
+        <div class="step-card">
+            <div class="step-number">01</div>
+            <h3>Enter Target</h3>
+            <p>Input a valid IPv4 address or domain name.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">02</div>
+            <h3>Scan with Nmap</h3>
+            <p>Automated service and version detection via python-nmap.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">03</div>
+            <h3>Analyze Services</h3>
+            <p>Rule-based analysis identifies common security considerations.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">04</div>
+            <h3>Generate Report</h3>
+            <p>Export findings to a professional HTML or PDF document.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

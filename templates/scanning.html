@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="scanning-container text-center mt-5">
+    <h2>SCANNING TARGET</h2>
+    <div class="target-display monospace">{{ target }}</div>
+    
+    <div class="loader-container mt-4 mb-4">
+        <div class="loader"></div>
+    </div>
+    
+    <p class="scanning-status" id="status-text">Running Nmap service detection...</p>
+    <p class="text-muted">Please wait. This may take several seconds depending on the target.</p>
+    
+    <div id="error-container" class="alert alert-error mt-4" style="display: none;">
+        <p id="error-message"></p>
+        <a href="{{ url_for('index') }}" class="btn btn-outline mt-2">Go Back</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const target = "{{ target }}";
+    const statusText = document.getElementById('status-text');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+    const loader = document.querySelector('.loader');
+    
+    // Status text animation
+    const statuses = [
+        "Running Nmap service detection...",
+        "Probing open ports...",
+        "Identifying service versions...",
+        "Analyzing security configuration..."
+    ];
+    let statusIndex = 0;
+    
+    const interval = setInterval(() => {
+        statusIndex = (statusIndex + 1) % statuses.length;
+        statusText.textContent = statuses[statusIndex];
+    }, 3000);
+    
+    // Perform scan via AJAX
+    fetch('{{ url_for("perform_scan") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'target': target
+        })
+    })
+    .then(response => response.json().then(data => ({status: response.status, body: data})))
+    .then(result => {
+        clearInterval(interval);
+        
+        if (result.status === 200 && result.body.redirect_url) {
+            statusText.textContent = "Scan complete! Redirecting...";
+            window.location.href = result.body.redirect_url;
+        } else {
+            // Handle error
+            loader.style.display = 'none';
+            statusText.style.display = 'none';
+            errorContainer.style.display = 'block';
+            errorMessage.textContent = result.body.error || "An unknown error occurred during scanning.";
+        }
+    })
+    .catch(error => {
+        clearInterval(interval);
+        loader.style.display = 'none';
+        statusText.style.display = 'none';
+        errorContainer.style.display = 'block';
+        errorMessage.textContent = "Network error or server crash. Please try again.";
+        console.error("Scan error:", error);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-header">
+    <div class="results-title">
+        <h1>SCAN RESULTS</h1>
+        <div class="target-badge monospace">{{ scan.target }}</div>
+    </div>
+    <div class="export-actions">
+        <a href="{{ url_for('download_html', scan_id=scan.id) }}" class="btn btn-outline">DOWNLOAD HTML</a>
+        <a href="{{ url_for('download_pdf', scan_id=scan.id) }}" class="btn btn-primary">DOWNLOAD PDF</a>
+    </div>
+</div>
+
+<div class="summary-cards grid-4 mt-4">
+    <div class="card stat-card">
+        <div class="stat-label">Host Status</div>
+        <div class="stat-value {{ 'status-up' if scan.host_status == 'up' else 'status-down' }}">{{ scan.host_status | upper }}</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-label">Scan Date</div>
+        <div class="stat-value small-text">{{ scan.scan_date }}</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-label">Scan Duration</div>
+        <div class="stat-value">{{ scan.scan_duration }}s</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-label">Open Ports</div>
+        <div class="stat-value">{{ scan.ports|length }}</div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2 class="section-title">OPEN PORTS & SERVICES</h2>
+    {% if scan.ports %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Port</th>
+                    <th>Protocol</th>
+                    <th>State</th>
+                    <th>Service</th>
+                    <th>Product</th>
+                    <th>Version</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for port in scan.ports %}
+                <tr>
+                    <td class="monospace font-bold">{{ port.port }}</td>
+                    <td>{{ port.protocol | upper }}</td>
+                    <td><span class="badge badge-open">{{ port.state | upper }}</span></td>
+                    <td>{{ port.service }}</td>
+                    <td>{{ port.product or '-' }}</td>
+                    <td>{{ port.version or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card bg-dark text-center py-4">
+        <p>No open ports were detected on this target.</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="mt-5">
+    <h2 class="section-title">SECURITY OBSERVATIONS</h2>
+    {% if scan.findings %}
+    <div class="findings-list">
+        {% for finding in scan.findings %}
+        <div class="card finding-card border-left-{{ finding.severity | lower }}">
+            <div class="finding-header">
+                <span class="badge severity-{{ finding.severity | lower }}">{{ finding.severity }}</span>
+            </div>
+            <div class="finding-body mt-2">
+                <p class="finding-text"><strong>Finding:</strong> {{ finding.finding }}</p>
+                <div class="recommendation mt-2">
+                    <strong>Recommendation:</strong><br>
+                    {{ finding.recommendation }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card bg-dark text-center py-4">
+        <p>No specific security observations were generated for the detected services.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

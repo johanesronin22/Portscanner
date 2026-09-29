@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header-section">
+    <h1>SCAN HISTORY</h1>
+    <p>Review previously conducted security scans.</p>
+</div>
+
+<div class="mt-4">
+    {% if scans %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Target</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Duration</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for scan in scans %}
+                <tr>
+                    <td class="monospace font-bold">{{ scan.target }}</td>
+                    <td>{{ scan.scan_date }}</td>
+                    <td>
+                        {% if scan.host_status == 'up' %}
+                            <span class="badge badge-open">UP</span>
+                        {% else %}
+                            <span class="badge badge-closed">DOWN</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ scan.scan_duration }}s</td>
+                    <td>
+                        <a href="{{ url_for('results', scan_id=scan.id) }}" class="btn btn-outline btn-small">VIEW</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card bg-dark text-center py-5">
+        <h3>No scans recorded yet.</h3>
+        <p class="mt-2 text-muted">Run your first network scan to see it here.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Start a Scan</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
