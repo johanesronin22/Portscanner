@@ -13,19 +13,17 @@ A complete, beginner-friendly cybersecurity internship project built with Python
 
 ## Screenshots
 
-*Note: Add actual screenshots of your running application here.*
-
 ### Homepage
-![Homepage](static/img/screenshot_home.png)
+<img width="1920" height="1080" alt="Screenshot 2026-09-30 011821" src="https://github.com/user-attachments/assets/7d0ef287-8a06-4fc7-ab7e-aa5d4319f7f6" />
 
 ### Scan Results & Security Recommendations
-![Scan Results](static/img/screenshot_results.png)
+<img width="1920" height="1080" alt="Screenshot 2026-09-30 011858" src="https://github.com/user-attachments/assets/287f5db6-93c3-47ac-a4b2-8ec6b40a7857" />
 
 ### Scan History
-![Scan History](static/img/screenshot_history.png)
+<img width="1920" height="1080" alt="Screenshot 2026-09-30 012148" src="https://github.com/user-attachments/assets/ccf102d1-0286-456c-924e-56af722d028a" />
 
 ### Generated Report
-![HTML/PDF Report](static/img/screenshot_report.png)
+<img width="1920" height="1080" alt="Screenshot 2026-09-30 012250" src="https://github.com/user-attachments/assets/6e0eff96-1098-455a-9a04-9df9dbda570a" />
 
 ## Architecture
 
